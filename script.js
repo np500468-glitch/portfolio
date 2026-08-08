@@ -153,6 +153,13 @@ function initNavbar() {
     }
   });
 
+  // Safety net: close the mobile menu when any menu item is selected
+  navLinks.addEventListener('click', (e) => {
+    if (e.target.closest('a')) {
+      closeMobileMenu();
+    }
+  });
+
   // Close mobile menu on resize to desktop
   window.addEventListener('resize', () => {
     if (window.innerWidth > 768) {
@@ -279,7 +286,23 @@ function initHero() {
    SCROLL REVEAL
    ============================================================ */
 function initScrollReveal() {
-  const revealEls = document.querySelectorAll('.reveal');
+  // All elements that use any reveal animation class
+  const revealSelectors = [
+    '.reveal',
+    '.reveal-left',
+    '.reveal-right',
+    '.reveal-scale',
+    '.reveal-rotate',
+    '.stagger-children',
+    '.timeline-draw',
+    '.about-bio',
+    '.contact-info',
+    '.contact-form',
+    '.footer-grid',
+    '.footer'
+  ];
+
+  const revealEls = document.querySelectorAll(revealSelectors.join(','));
 
   if (!('IntersectionObserver' in window)) {
     // Fallback: show everything

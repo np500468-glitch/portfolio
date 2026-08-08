@@ -316,7 +316,7 @@ img {
   top: 0;
   z-index: 1000;
   padding: 16px 24px;
-  overflow: hidden;
+  overflow: visible;
   transition: transform 0.4s ease, box-shadow 0.3s ease;
 }
 
@@ -1116,6 +1116,274 @@ img {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ---------- Directional Reveal Variants ---------- */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-rotate {
+  opacity: 0;
+  transform: perspective(800px) rotateY(12deg) translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-rotate.visible {
+  opacity: 1;
+  transform: perspective(800px) rotateY(0) translateY(0);
+}
+
+/* ---------- Staggered Grid Children ---------- */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stagger-children.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0.05s; }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 0.15s; }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 0.25s; }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 0.35s; }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 0.45s; }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 0.55s; }
+.stagger-children.visible > *:nth-child(7) { transition-delay: 0.65s; }
+.stagger-children.visible > *:nth-child(8) { transition-delay: 0.75s; }
+
+/* ---------- Timeline Line Draw ---------- */
+.timeline-draw::before {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.timeline-draw.visible::before {
+  transform: scaleY(1);
+}
+
+/* ---------- Timeline Dot Pulse ---------- */
+.timeline-item .timeline-dot {
+  animation: timelineDotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes timelineDotPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px var(--accent), 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 3px var(--accent), 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+}
+
+/* ---------- Section Tag Shimmer ---------- */
+.section-tag {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-tag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: tagShimmer 3s ease-in-out infinite;
+}
+
+@keyframes tagShimmer {
+  0% { left: -100%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
+}
+
+/* ---------- Gradient Text Animated ---------- */
+.gradient-text {
+  background-size: 200% 200%;
+  animation: gradientTextFlow 6s ease-in-out infinite;
+}
+
+@keyframes gradientTextFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ---------- Card Hover Lift (enhanced) ---------- */
+.service-card,
+.skill-category,
+.project-card,
+.stat-card,
+.timeline-content,
+.contact-card {
+  will-change: transform;
+}
+
+/* ---------- Project Card Image Zoom ---------- */
+.project-thumb {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Contact Form Field Stagger ---------- */
+.contact-form .form-group {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.contact-form.visible .form-group {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact-form.visible .form-group:nth-child(1) { transition-delay: 0.1s; }
+.contact-form.visible .form-group:nth-child(2) { transition-delay: 0.2s; }
+.contact-form.visible .form-group:nth-child(3) { transition-delay: 0.3s; }
+.contact-form.visible .form-group:nth-child(4) { transition-delay: 0.4s; }
+.contact-form.visible .form-submit { transition-delay: 0.5s; }
+
+.contact-form .form-submit {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.contact-form.visible .form-submit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Footer Column Stagger ---------- */
+.footer-grid > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-grid.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-grid.visible > *:nth-child(1) { transition-delay: 0.05s; }
+.footer-grid.visible > *:nth-child(2) { transition-delay: 0.15s; }
+.footer-grid.visible > *:nth-child(3) { transition-delay: 0.25s; }
+.footer-grid.visible > *:nth-child(4) { transition-delay: 0.35s; }
+
+.footer-bottom {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease 0.4s, transform 0.7s ease 0.4s;
+}
+
+.footer.visible .footer-bottom {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Newsletter Button Pulse ---------- */
+.footer-newsletter button {
+  animation: newsletterPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes newsletterPulse {
+  0%, 100% { box-shadow: var(--btn-primary-shadow); }
+  50% { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.15), var(--btn-primary-shadow); }
+}
+
+/* ---------- About Info List Stagger ---------- */
+.about-info li {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.about-bio.visible .about-info li {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-bio.visible .about-info li:nth-child(1) { transition-delay: 0.1s; }
+.about-bio.visible .about-info li:nth-child(2) { transition-delay: 0.2s; }
+.about-bio.visible .about-info li:nth-child(3) { transition-delay: 0.3s; }
+.about-bio.visible .about-info li:nth-child(4) { transition-delay: 0.4s; }
+
+/* ---------- Contact Card Slide ---------- */
+.contact-info .contact-card {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.contact-info.visible .contact-card {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.contact-info.visible .contact-card:nth-child(1) { transition-delay: 0.1s; }
+.contact-info.visible .contact-card:nth-child(2) { transition-delay: 0.2s; }
+.contact-info.visible .contact-card:nth-child(3) { transition-delay: 0.3s; }
+
+.contact-info .contact-socials {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+}
+
+.contact-info.visible .contact-socials {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Timeline Item Slide ---------- */
+.timeline-item {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.timeline.visible .timeline-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline.visible .timeline-item:nth-child(1) { transition-delay: 0.1s; }
+.timeline.visible .timeline-item:nth-child(2) { transition-delay: 0.25s; }
+.timeline.visible .timeline-item:nth-child(3) { transition-delay: 0.4s; }
+.timeline.visible .timeline-item:nth-child(4) { transition-delay: 0.55s; }
 
 /* ============================================================
    ABOUT SECTION
@@ -2037,7 +2305,7 @@ img {
     transform: translateY(-16px) scale(0.98);
     visibility: hidden;
     transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
-    z-index: 999;
+    z-index: 10001;
   }
 
   .nav-links.open {
