@@ -89,11 +89,20 @@ function initNavbar() {
   };
 
   /* ---------- Mobile menu ---------- */
+  const lockScroll = () => {
+    document.body.classList.add('menu-open');
+  };
+
+  const unlockScroll = () => {
+    document.body.classList.remove('menu-open');
+  };
+
   const openMobileMenu = () => {
     hamburger.classList.add('open');
     navLinks.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
     hamburger.setAttribute('aria-label', 'Close menu');
+    lockScroll();
   };
 
   const closeMobileMenu = () => {
@@ -101,6 +110,7 @@ function initNavbar() {
     navLinks.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
     hamburger.setAttribute('aria-label', 'Open menu');
+    unlockScroll();
   };
 
   const handleMobileMenu = () => {
@@ -160,9 +170,9 @@ function initNavbar() {
     }
   });
 
-  // Close mobile menu on resize to desktop
+  // Close mobile menu when resizing past the mobile breakpoint
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > 992) {
       closeMobileMenu();
     }
   });
@@ -228,8 +238,11 @@ function initHero() {
     setTimeout(type, delay);
   };
 
-  /* ---------- Mouse parallax effect ---------- */
+  /* ---------- Mouse parallax effect (desktop only) ---------- */
+  const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
   const handleMouseParallax = (e) => {
+    if (coarsePointer) return; // skip on touch devices
     const { clientX, clientY } = e;
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
@@ -247,11 +260,17 @@ function initHero() {
 
   /* ---------- Mouse glow follow ---------- */
   const handleMouseGlow = (e) => {
+    if (coarsePointer) return; // skip on touch devices
     const { clientX, clientY } = e;
     const rect = hero.getBoundingClientRect();
     mouseGlow.style.left = `${clientX - rect.left}px`;
     mouseGlow.style.top = `${clientY - rect.top}px`;
   };
+
+  // Hide the mouse glow entirely on touch devices
+  if (coarsePointer && mouseGlow) {
+    mouseGlow.style.display = 'none';
+  }
 
   /* ---------- Fade-up animations on load ---------- */
   const triggerFadeUp = () => {

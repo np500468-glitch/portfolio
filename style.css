@@ -218,6 +218,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px; /* offset for sticky navbar */
+  overflow-x: clip; /* extra safety: prevent horizontal scroll on html too */
 }
 
 body {
@@ -227,6 +228,11 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Lock background scroll while the mobile menu is open */
+body.menu-open {
+  overflow: hidden;
 }
 
 /* Everything above the page background */
@@ -316,6 +322,8 @@ img {
   top: 0;
   z-index: 1000;
   padding: 16px 24px;
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
   overflow: visible;
   transition: transform 0.4s ease, box-shadow 0.3s ease;
 }
@@ -605,6 +613,7 @@ img {
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh; /* better mobile URL-bar handling */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1368,6 +1377,34 @@ img {
   transform: translateY(0);
 }
 
+/* ---------- Short viewports ---------- */
+@media (max-height: 650px) {
+  .scroll-indicator {
+    display: none; /* avoid overlapping hero content on short screens */
+  }
+}
+
+/* ---------- Touch devices: unobstructed project links ---------- */
+@media (hover: none) {
+  .project-overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.35) 60%);
+  }
+
+  .project-link {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .project-card:hover .project-thumb {
+    transform: none;
+  }
+
+  .project-card:hover .project-emoji {
+    transform: none;
+  }
+}
+
 /* ---------- Timeline Item Slide ---------- */
 .timeline-item {
   opacity: 0;
@@ -2015,6 +2052,9 @@ img {
 
 .form-group input,
 .form-group textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 14px 16px;
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -2078,6 +2118,9 @@ img {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
   padding: 60px 24px 0;
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
+  padding-bottom: env(safe-area-inset-bottom);
   transition: background 0.4s ease;
 }
 
@@ -2150,6 +2193,9 @@ img {
 
 .footer-newsletter input {
   flex: 1;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
   padding: 12px 16px;
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -2274,8 +2320,10 @@ img {
   }
 }
 
-/* ---------- Mobile (≤ 768px) ---------- */
-@media (max-width: 768px) {
+/* ---------- Mobile & Small Tablet (≤ 992px) ----------
+   Navbar switches to hamburger menu so the desktop bar
+   (logo + 6 links + resume + theme toggle) never overflows. */
+@media (max-width: 992px) {
   .navbar {
     padding: 12px 16px;
   }
@@ -2291,6 +2339,9 @@ img {
     top: 90px;
     left: 16px;
     right: 16px;
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     flex-direction: column;
     align-items: stretch;
     gap: 4px;
@@ -2339,7 +2390,7 @@ img {
     display: flex;
   }
 
-  /* Hide resume button text on small screens */
+  /* Hide resume button text on narrow screens */
   .btn-resume-text {
     display: none;
   }
@@ -2347,7 +2398,10 @@ img {
   .btn-resume {
     padding: 10px 14px;
   }
+}
 
+/* ---------- Mobile (≤ 768px) ---------- */
+@media (max-width: 768px) {
   .hero {
     padding: 100px 20px 80px;
   }
@@ -2370,6 +2424,31 @@ img {
   .blob-1 { width: 280px; height: 280px; }
   .blob-2 { width: 240px; height: 240px; }
   .blob-3 { width: 200px; height: 200px; }
+
+  /* Lighter GPU load on mobile: reduce blur radius */
+  .blob,
+  .navbar-blob {
+    filter: blur(40px);
+  }
+
+  [data-theme="dark"] .blob-1,
+  [data-theme="dark"] .blob-2,
+  [data-theme="dark"] .blob-3 {
+    filter: blur(50px);
+  }
+
+  /* Gentler blob motion on small screens */
+  .blob-1,
+  .navbar-blob-1 { animation-duration: 18s; }
+  .blob-2,
+  .navbar-blob-2 { animation-duration: 22s; }
+  .blob-3,
+  .navbar-blob-3 { animation-duration: 26s; }
+
+  /* Tighter hero spacing so content fits without clipping */
+  .hero-content {
+    gap: 14px;
+  }
 
   .scroll-indicator {
     bottom: 20px;
@@ -2428,6 +2507,15 @@ img {
 
   .hero {
     padding: 80px 16px 70px;
+  }
+
+  .hero-name {
+    font-size: clamp(2rem, 9vw, 4rem);
+  }
+
+  .hero-typing {
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    min-height: 2.5em;
   }
 
   .hero-greeting {
